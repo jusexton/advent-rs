@@ -1,3 +1,5 @@
+#![feature(let_chains)]
+
 mod solutions;
 mod util;
 
@@ -58,8 +60,8 @@ fn run_by_day(day: u8) -> Result<()> {
         }
         6 => {
             let patrol_locations = solutions::d06::count_patrol_locations(input);
-            let loop_possibilities = solutions::d06::count_loop_possibilities(input);
-            println!("== Day Six ==\nPatrol Locations: {patrol_locations}\nLoop Possibilities: {loop_possibilities}\n");
+            // let loop_possibilities = solutions::d06::count_loop_possibilities(input);
+            println!("== Day Six ==\nPatrol Locations: {patrol_locations}");
         }
         _ => {}
     }
