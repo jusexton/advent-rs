@@ -61,7 +61,7 @@ fn run_by_day(day: u8) -> Result<()> {
         6 => {
             let patrol_locations = solutions::d06::count_patrol_locations(input);
             // let loop_possibilities = solutions::d06::count_loop_possibilities(input);
-            println!("== Day Six ==\nPatrol Locations: {patrol_locations}");
+            println!("== Day Six ==\nPatrol Locations: {patrol_locations}\n");
         }
         _ => {}
     }

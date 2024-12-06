@@ -69,6 +69,7 @@ pub fn count_patrol_locations(input: &str) -> u32 {
     count
 }
 
+#[allow(dead_code)]
 fn obstacle_simulation(
     original_idx: usize,
     original_next_idx: usize,
@@ -80,25 +81,22 @@ fn obstacle_simulation(
     let mut direction = original_dir.cycle();
     let mut visited = HashSet::new();
     while let Position::InBounds(next_idx) = find_next_position(idx, shape, direction) {
-        match (map[idx], map[next_idx], original_next_idx == next_idx) {
-            (_, '#', _) | (_, _, true) => direction = direction.cycle(),
-            _ => {
-                visited.insert((idx, direction));
-                idx = next_idx;
-            }
+        if map[next_idx] == '#' || next_idx == original_next_idx {
+            direction = direction.cycle();
+        } else {
+            visited.insert((idx, direction));
+            idx = next_idx;
         }
 
         if visited.contains(&(idx, direction)) {
-            if idx == original_idx {
-                return true;
-            }
-            break;
+            return idx == original_idx;
         }
     }
 
     false
 }
 
+#[allow(dead_code)]
 pub fn count_loop_possibilities(input: &str) -> u32 {
     let shape = input.find("\n").unwrap();
     let mut map: Vec<_> = input.chars().filter(|c| *c != '\n').collect();
