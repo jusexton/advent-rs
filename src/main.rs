@@ -5,7 +5,7 @@ use std::{fs, ops::RangeInclusive};
 
 use anyhow::{anyhow, Context, Result};
 
-const DAY_RANGE: RangeInclusive<u8> = 1..=5;
+const DAY_RANGE: RangeInclusive<u8> = 1..=6;
 const GENERAL_ERROR_MSG: &str = "Providing no value will run all solutions. To run a specific day provide the valid day as an argument. All other scenarios will be treated as errors.";
 
 fn main() -> Result<()> {
@@ -54,7 +54,12 @@ fn run_by_day(day: u8) -> Result<()> {
         5 => {
             let valid_sum = solutions::d05::sum_valid_print_queue(input);
             let corrected_sum = solutions::d05::sum_corrected_print_queue(input);
-            println!("== Day Five ==\nValid Print Queue Sum: {valid_sum}\nCorrected Print Queue Sum: {corrected_sum}");
+            println!("== Day Five ==\nValid Print Queue Sum: {valid_sum}\nCorrected Print Queue Sum: {corrected_sum}\n");
+        }
+        6 => {
+            let patrol_locations = solutions::d06::count_patrol_locations(input);
+            let loop_possibilities = solutions::d06::count_loop_possibilities(input);
+            println!("== Day Six ==\nPatrol Locations: {patrol_locations}\nLoop Possibilities: {loop_possibilities}\n");
         }
         _ => {}
     }
