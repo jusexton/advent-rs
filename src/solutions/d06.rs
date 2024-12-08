@@ -123,8 +123,5 @@ pub fn count_loop_possibilities(input: &str) -> u32 {
         }
     }
 
-    // 63, 97, 77, 76, 81, 83
-    println!("{:?}", positions);
-
     positions.len() as u32
 }

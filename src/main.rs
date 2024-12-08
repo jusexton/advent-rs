@@ -1,4 +1,5 @@
 #![feature(let_chains)]
+#![feature(array_windows)]
 
 mod solutions;
 mod util;
@@ -7,7 +8,7 @@ use std::{fs, ops::RangeInclusive};
 
 use anyhow::{anyhow, Context, Result};
 
-const DAY_RANGE: RangeInclusive<u8> = 1..=6;
+const DAY_RANGE: RangeInclusive<u8> = 1..=7;
 const GENERAL_ERROR_MSG: &str = "Providing no value will run all solutions. To run a specific day provide the valid day as an argument. All other scenarios will be treated as errors.";
 
 fn main() -> Result<()> {
@@ -60,8 +61,14 @@ fn run_by_day(day: u8) -> Result<()> {
         }
         6 => {
             let patrol_locations = solutions::d06::count_patrol_locations(input);
-            // let loop_possibilities = solutions::d06::count_loop_possibilities(input);
-            println!("== Day Six ==\nPatrol Locations: {patrol_locations}\n");
+            let loop_possibilities = solutions::d06::count_loop_possibilities(input);
+            println!("== Day Six ==\nPatrol Locations: {patrol_locations}\nLoop Possibilities: {loop_possibilities}\n");
+        }
+        7 => {
+            let summed_calibrations = solutions::d07::sum_calibrations(input);
+            let summed_calibrations_with_concat =
+                solutions::d07::sum_calibrations_with_concatenation(input);
+            println!("== Day Seven ==\nSummed Calibrations: {summed_calibrations}\nSummed Calibrations With Concatenation: {summed_calibrations_with_concat}");
         }
         _ => {}
     }
