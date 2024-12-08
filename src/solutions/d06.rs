@@ -111,8 +111,7 @@ pub fn count_loop_possibilities(input: &str) -> u32 {
             (_, '#') => direction = direction.cycle(),
             ('.', _) => {
                 // On every valid move, pretend there is an obstacle ahead and play out the movements.
-                // If the cursor makes it back to where it started while every position visited has already
-                // been visited, a loop has been identified.
+                // If the cursor makes it exactly back to where it started, a loop has been identified.
                 let loop_detected = obstacle_simulation(idx, next_idx, shape, direction, &map);
                 if loop_detected {
                     positions.insert(next_idx);
