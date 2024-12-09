@@ -7,7 +7,7 @@ use std::{fs, ops::RangeInclusive};
 
 use anyhow::{anyhow, Context, Result};
 
-const DAY_RANGE: RangeInclusive<u8> = 1..=8;
+const DAY_RANGE: RangeInclusive<u8> = 1..=9;
 const GENERAL_ERROR_MSG: &str = "Providing no value will run all solutions. To run a specific day provide the valid day as an argument. All other scenarios will be treated as errors.";
 
 fn main() -> Result<()> {
@@ -90,6 +90,12 @@ fn run_by_day(day: u8) -> Result<()> {
             8,
             solutions::d08::count_anti_nodes(input),
             solutions::d08::count_resonant_anti_nodes(input),
+        ),
+        9 => display_results_with_suffix(
+            9,
+            solutions::d09::defrag_file_bits_and_checksum(input),
+            solutions::d09::defrag_file_chunk_and_checksum(input),
+            "",
         ),
         _ => {}
     }
