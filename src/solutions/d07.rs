@@ -1,5 +1,3 @@
-use std::collections::VecDeque;
-
 fn concat_numbers(a: u64, b: u64) -> u64 {
     let mut digit_count = 0;
     let mut tmp = b;
@@ -11,35 +9,30 @@ fn concat_numbers(a: u64, b: u64) -> u64 {
     a * (10_u64.pow(digit_count)) + b
 }
 
-fn generate_calibrations(numbers: Vec<u64>, operations: &[fn(u64, u64) -> u64]) -> Vec<u64> {
+fn calibration_exists(total: u64, numbers: Vec<u64>, operations: Vec<fn(u64, u64) -> u64>) -> bool {
     fn inner(
-        mut numbers: VecDeque<u64>,
-        results: &mut Vec<u64>,
+        idx: usize,
+        current: u64,
+        target: u64,
+        numbers: &[u64],
         operations: &[fn(u64, u64) -> u64],
-    ) {
-        if numbers.len() < 2 {
-            results.push(numbers[0]);
-            return;
+    ) -> bool {
+        if idx >= numbers.len() {
+            return current == target;
         }
 
-        while let Some(val_one) = numbers.pop_front()
-            && let Some(val_two) = numbers.pop_front()
-        {
-            for op in operations {
-                let mut n1 = numbers.clone();
-                n1.push_front(op(val_one, val_two));
-                inner(n1, results, operations);
-            }
-        }
+        operations.iter().any(|op| {
+            inner(
+                idx + 1,
+                op(current, numbers[idx]),
+                target,
+                numbers,
+                operations,
+            )
+        })
     }
 
-    let mut results = vec![];
-    inner(VecDeque::from(numbers), &mut results, operations);
-    results
-}
-
-fn calibration_exists(total: u64, numbers: Vec<u64>, operations: Vec<fn(u64, u64) -> u64>) -> bool {
-    generate_calibrations(numbers, &operations).contains(&total)
+    inner(1, numbers[0], total, &numbers, &operations)
 }
 
 pub fn sum_calibrations(input: &str) -> u64 {
@@ -80,13 +73,6 @@ pub fn sum_calibrations_with_concatenation(input: &str) -> u64 {
 mod tests {
     use super::*;
 
-    #[test]
-    fn generates_all_calibrations() {
-        assert_eq!(
-            vec![6, 5, 9, 6],
-            generate_calibrations(vec![1, 2, 3], &[|a, b| a * b, |a, b| a + b])
-        )
-    }
     #[test]
     fn concatenates_two_numbers() {
         assert_eq!(123456, concat_numbers(123, 456))
