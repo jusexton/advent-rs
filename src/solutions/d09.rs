@@ -63,7 +63,7 @@ impl DiskMap {
         }
     }
 
-    fn defrag_by_file_bits(mut self) -> DefragmentedDiskMap {
+    fn into_defrag_by_bits(mut self) -> DefragmentedDiskMap {
         let n = self.len() - 1;
         let (mut left, mut right) = (0, n);
         while left <= right {
@@ -79,26 +79,21 @@ impl DiskMap {
         DefragmentedDiskMap { raw: self.raw }
     }
 
-    fn defrag_by_file_chunks(mut self) -> DefragmentedDiskMap {
+    fn into_defrag_by_chunks(mut self) -> DefragmentedDiskMap {
         while let Some(occupied_block) = self.occupied_blocks.pop() {
-            if let Some((empty_idx, empty_block)) =
-                self.empty_blocks.iter_mut().enumerate().find(|(_, block)| {
-                    block.size >= occupied_block.size && block.idx < occupied_block.idx
-                })
+            if let Some(empty_block) = self
+                .empty_blocks
+                .iter_mut()
+                .find(|block| block.size >= occupied_block.size && block.idx < occupied_block.idx)
             {
                 // Swap bits
                 for i in 0..occupied_block.size {
                     self.raw.swap(empty_block.idx + i, occupied_block.idx + i);
                 }
 
-                // Update the empty block
-                let free = empty_block.size - occupied_block.size;
-                if free == 0 {
-                    self.empty_blocks.remove(empty_idx);
-                } else {
-                    empty_block.idx += occupied_block.size;
-                    empty_block.size -= occupied_block.size;
-                }
+                // Update empty chunk
+                empty_block.idx += occupied_block.size;
+                empty_block.size -= occupied_block.size;
             }
         }
         DefragmentedDiskMap { raw: self.raw }
@@ -110,12 +105,12 @@ impl DiskMap {
 }
 
 pub fn defrag_file_bits_and_checksum(input: &str) -> u64 {
-    let defragmented = DiskMap::new(input).defrag_by_file_bits();
+    let defragmented = DiskMap::new(input).into_defrag_by_bits();
     defragmented.checksum()
 }
 
 pub fn defrag_file_chunk_and_checksum(input: &str) -> u64 {
-    let defragmented = DiskMap::new(input).defrag_by_file_chunks();
+    let defragmented = DiskMap::new(input).into_defrag_by_chunks();
     defragmented.checksum()
 }
 
@@ -209,7 +204,7 @@ mod tests {
                     6, 6, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
                 ]
             },
-            disk_map.defrag_by_file_bits()
+            disk_map.into_defrag_by_bits()
         );
     }
 
@@ -251,7 +246,7 @@ mod tests {
                     5, 5, -1, 6, 6, 6, 6, -1, -1, -1, -1, -1, 8, 8, 8, 8, -1, -1
                 ]
             },
-            disk_map.defrag_by_file_chunks()
+            disk_map.into_defrag_by_chunks()
         );
     }
 

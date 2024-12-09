@@ -79,7 +79,7 @@ fn run_by_day(day: u8) -> Result<()> {
         6 => display_results(
             6,
             solutions::d06::count_patrol_locations(input),
-            "INCOMPLETE",
+            solutions::incomplete(),
         ),
         7 => display_results(
             7,
