@@ -67,9 +67,11 @@ impl DiskMap {
         let n = self.len() - 1;
         let (mut left, mut right) = (0, n);
         while left <= right {
+            // Find empty space that needs to be filled
             while self.raw[left] != -1 {
                 left += 1
             }
+            // Find right bits that need to be swapped
             while self.raw[right] == -1 {
                 right -= 1;
             }
@@ -81,6 +83,7 @@ impl DiskMap {
 
     fn into_defrag_by_chunks(mut self) -> DefragmentedDiskMap {
         while let Some(occupied_block) = self.occupied_blocks.pop() {
+            // Match with first empty block that can fit the occupied block
             if let Some(empty_block) = self
                 .empty_blocks
                 .iter_mut()
