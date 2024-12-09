@@ -8,7 +8,7 @@ use std::{fs, ops::RangeInclusive};
 
 use anyhow::{anyhow, Context, Result};
 
-const DAY_RANGE: RangeInclusive<u8> = 1..=7;
+const DAY_RANGE: RangeInclusive<u8> = 1..=8;
 const GENERAL_ERROR_MSG: &str = "Providing no value will run all solutions. To run a specific day provide the valid day as an argument. All other scenarios will be treated as errors.";
 
 fn main() -> Result<()> {
@@ -68,7 +68,12 @@ fn run_by_day(day: u8) -> Result<()> {
             let summed_calibrations = solutions::d07::sum_calibrations(input);
             let summed_calibrations_with_concat =
                 solutions::d07::sum_calibrations_with_concatenation(input);
-            println!("== Day Seven ==\nSummed Calibrations: {summed_calibrations}\nSummed Calibrations With Concatenation: {summed_calibrations_with_concat}");
+            println!("== Day Seven ==\nSummed Calibrations: {summed_calibrations}\nSummed Calibrations With Concatenation: {summed_calibrations_with_concat}\n");
+        }
+        8 => {
+            let node_count = solutions::d08::count_anti_nodes(input);
+            let node_count_with_resonance = solutions::d08::count_resonant_anti_nodes(input);
+            println!("== Day Eight ==\nAnti Node Count: {node_count}\nAnti Node Count with Resonance: {node_count_with_resonance}");
         }
         _ => {}
     }

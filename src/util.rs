@@ -2,6 +2,15 @@ use std::{ops::Deref, str::Lines};
 
 use anyhow::{Context, Result};
 
+#[macro_export]
+macro_rules! hashmap {
+    ($( $key: expr => $val: expr ),*) => {{
+         let mut map = ::std::collections::HashMap::new();
+         $( map.insert($key, $val); )*
+         map
+    }}
+}
+
 pub struct NumberLineParser<'a> {
     lines: Lines<'a>,
     split_fn: Box<dyn Fn(&'a str) -> Box<dyn Iterator<Item = &'a str> + 'a>>,
