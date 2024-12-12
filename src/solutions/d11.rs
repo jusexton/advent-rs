@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{collections::HashMap, str::FromStr};
 
 fn parse_numbers<T>(input: &str) -> Vec<T>
 where
@@ -35,23 +35,34 @@ fn split_digits(digits: Vec<i8>) -> (u64, u64) {
     )
 }
 
-pub fn stone_count_after_blinking(input: &str) -> u32 {
-    let mut numbers: Vec<u64> = parse_numbers(input);
-    for _ in 0..6 {
-        let mut new_numbers = Vec::with_capacity(100_000);
-        for number in numbers {
-            let digits = get_digits(number);
-            if number == 0 {
-                new_numbers.push(1);
-            } else if digits.len() % 2 == 0 {
-                let (left, right) = split_digits(digits);
-                new_numbers.push(left);
-                new_numbers.push(right);
-            } else {
-                new_numbers.push(number * 2024);
-            }
+fn stone_count(number: u64, depth: usize) -> u64 {
+    fn inner(number: u64, depth: usize, cache: &mut HashMap<(u64, usize), u64>) -> u64 {
+        if depth == 0 {
+            return 1;
         }
-        numbers = new_numbers
+        if let Some(&value) = cache.get(&(number, depth)) {
+            return value;
+        }
+
+        let digits = get_digits(number);
+        let result = match number {
+            0 => inner(1, depth - 1, cache),
+            _ if digits.len() % 2 == 0 => {
+                let (left, right) = split_digits(digits);
+                inner(left, depth - 1, cache) + inner(right, depth - 1, cache)
+            }
+            _ => inner(2024 * number, depth - 1, cache),
+        };
+        cache.insert((number, depth), result);
+        result
     }
-    numbers.len() as u32
+
+    inner(number, depth, &mut HashMap::new())
+}
+
+pub fn stone_count_after_blinking(input: &str) -> u64 {
+    parse_numbers(input)
+        .iter()
+        .map(|&number| stone_count(number, 75))
+        .sum()
 }
