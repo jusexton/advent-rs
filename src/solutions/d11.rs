@@ -37,7 +37,7 @@ fn split_digits(digits: Vec<i8>) -> (u64, u64) {
 
 pub fn stone_count_after_blinking(input: &str) -> u32 {
     let mut numbers: Vec<u64> = parse_numbers(input);
-    for _ in 0..75 {
+    for _ in 0..6 {
         let mut new_numbers = Vec::with_capacity(100_000);
         for number in numbers {
             let digits = get_digits(number);
