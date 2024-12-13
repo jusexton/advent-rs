@@ -60,9 +60,9 @@ fn stone_count(number: u64, depth: usize) -> u64 {
     inner(number, depth, &mut HashMap::new())
 }
 
-pub fn stone_count_after_blinking(input: &str) -> u64 {
+pub fn stone_count_after_blinking(input: &str, count: usize) -> u64 {
     parse_numbers(input)
         .iter()
-        .map(|&number| stone_count(number, 75))
+        .map(|&number| stone_count(number, count))
         .sum()
 }

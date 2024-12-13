@@ -11,6 +11,6 @@ pub mod d10;
 pub mod d11;
 pub mod d12;
 
-pub fn incomplete() -> String {
+pub fn incomplete(_: &str) -> String {
     "INCOMPLETE".to_string()
 }

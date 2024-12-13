@@ -3,7 +3,11 @@
 
 mod solutions;
 mod util;
-use std::{fs, ops::RangeInclusive};
+use std::{
+    fs,
+    ops::RangeInclusive,
+    time::{Duration, Instant},
+};
 
 use anyhow::{anyhow, Context, Result};
 
@@ -28,88 +32,124 @@ fn parse_args(args: Vec<String>) -> Result<u8> {
     }
 }
 
-fn display_results<TOne, TTwo>(day: u8, part_one: TOne, part_two: TTwo)
-where
+fn run_and_display<TOne, TTwo>(
+    day: u8,
+    input: &str,
+    part_one: fn(&str) -> TOne,
+    part_two: fn(&str) -> TTwo,
+) where
     TOne: std::fmt::Display,
     TTwo: std::fmt::Display,
 {
-    display_results_with_suffix(day, part_one, part_two, "\n");
+    run_and_display_with_suffix(day, input, part_one, part_two, "\n");
 }
 
-fn display_results_with_suffix<TOne, TTwo>(day: u8, part_one: TOne, part_two: TTwo, suffix: &str)
-where
+fn run_and_display_with_suffix<TOne, TTwo>(
+    day: u8,
+    input: &str,
+    part_one: fn(&str) -> TOne,
+    part_two: fn(&str) -> TTwo,
+    suffix: &str,
+) where
     TOne: std::fmt::Display,
     TTwo: std::fmt::Display,
 {
-    println!("==== Day {day} ====");
-    println!("Part One: {part_one}");
-    println!("Part Two: {part_two}");
+    let (result_one, duration_one) = time_and_run(input, part_one);
+    let (result_two, duration_two) = time_and_run(input, part_two);
+    println!(
+        "({} ms) Day {day} ===============",
+        duration_one.as_millis() + duration_two.as_millis()
+    );
+    println!("({} ms) Part One: {result_one}", duration_one.as_millis());
+    println!("({} ms) Part Two: {result_two}", duration_two.as_millis());
     print!("{suffix}")
+}
+
+fn time_and_run<T>(input: &str, f: fn(&str) -> T) -> (T, Duration)
+where
+    T: std::fmt::Display,
+{
+    let start = Instant::now();
+    let result = f(input);
+    let elapsed = start.elapsed();
+    (result, elapsed)
 }
 
 fn run_by_day(day: u8) -> Result<()> {
     let path = format!("data/d{:02}.txt", day);
     let input = &fs::read_to_string(&path).context(format!("Failed to open {path}"))?;
     match day {
-        1 => display_results(
+        1 => run_and_display(
             1,
-            solutions::d01::list_distance(input),
-            solutions::d01::list_similarity(input),
+            input,
+            solutions::d01::list_distance,
+            solutions::d01::list_similarity,
         ),
-        2 => display_results(
+        2 => run_and_display(
             2,
-            solutions::d02::count_safe_reports(input),
-            solutions::d02::count_safe_reports_with_dampener(input),
+            input,
+            solutions::d02::count_safe_reports,
+            solutions::d02::count_safe_reports_with_dampener,
         ),
-        3 => display_results(
+        3 => run_and_display(
             3,
-            solutions::d03::process_memory(input),
-            solutions::d03::process_memory_with_conditionals(input),
+            input,
+            solutions::d03::process_memory,
+            solutions::d03::process_memory_with_conditionals,
         ),
-        4 => display_results(
+        4 => run_and_display(
             4,
-            solutions::d04::count_xmas(input),
-            solutions::d04::count_x_mas(input),
+            input,
+            solutions::d04::count_xmas,
+            solutions::d04::count_x_mas,
         ),
-        5 => display_results(
+        5 => run_and_display(
             5,
-            solutions::d05::sum_valid_print_queue(input),
-            solutions::d05::sum_corrected_print_queue(input),
+            input,
+            solutions::d05::sum_valid_print_queue,
+            solutions::d05::sum_corrected_print_queue,
         ),
-        6 => display_results(
+        6 => run_and_display(
             6,
-            solutions::d06::count_patrol_locations(input),
-            solutions::incomplete(),
+            input,
+            solutions::d06::count_patrol_locations,
+            solutions::incomplete,
         ),
-        7 => display_results(
+        7 => run_and_display(
             7,
-            solutions::d07::sum_calibrations(input),
-            solutions::d07::sum_calibrations_with_concatenation(input),
+            input,
+            solutions::d07::sum_calibrations,
+            solutions::d07::sum_calibrations_with_concatenation,
         ),
-        8 => display_results(
+        8 => run_and_display(
             8,
-            solutions::d08::count_anti_nodes(input),
-            solutions::d08::count_resonant_anti_nodes(input),
+            input,
+            solutions::d08::count_anti_nodes,
+            solutions::d08::count_resonant_anti_nodes,
         ),
-        9 => display_results(
+        9 => run_and_display(
             9,
-            solutions::d09::defrag_file_bits_and_checksum(input),
-            solutions::d09::defrag_file_chunk_and_checksum(input),
+            input,
+            solutions::d09::defrag_file_bits_and_checksum,
+            solutions::d09::defrag_file_chunk_and_checksum,
         ),
-        10 => display_results(
+        10 => run_and_display(
             10,
-            solutions::d10::score_trail_heads(input),
-            solutions::d10::rate_trail_heads(input),
+            input,
+            solutions::d10::score_trail_heads,
+            solutions::d10::rate_trail_heads,
         ),
-        11 => display_results(
+        11 => run_and_display(
             11,
-            solutions::d11::stone_count_after_blinking(input),
-            solutions::incomplete(),
+            input,
+            |input| solutions::d11::stone_count_after_blinking(input, 25),
+            |input| solutions::d11::stone_count_after_blinking(input, 75),
         ),
-        12 => display_results_with_suffix(
+        12 => run_and_display_with_suffix(
             12,
-            solutions::d12::garden_plot_price(input),
-            solutions::incomplete(),
+            input,
+            solutions::d12::garden_plot_price,
+            solutions::incomplete,
             "",
         ),
         _ => {}
