@@ -50,27 +50,22 @@ pub fn garden_plot_price(input: &str) -> u32 {
     let shape = input.find('\n').unwrap();
     let map: Vec<u8> = input.bytes().filter(|&c| c != b'\n').collect();
     let mut visited = HashSet::new();
-    let mut plots = HashMap::new();
+    let mut plots: HashMap<char, Vec<_>> = HashMap::new();
     for idx in 0..map.len() {
         if visited.contains(&idx) {
             continue;
         }
 
-        plots
-            .entry(map[idx] as char)
-            .or_insert(vec![])
-            .push(Region::new());
+        let plant = map[idx] as char;
+        let regions = plots.entry(plant).or_default();
+        regions.push(Region::new());
 
         let mut stack = vec![idx];
         while let Some(node) = stack.pop() {
             visited.insert(node);
             let nodes = adjacent_nodes(node, shape, &map);
 
-            let region = plots
-                .get_mut(&(map[idx] as char))
-                .unwrap()
-                .last_mut()
-                .unwrap();
+            let region = plots.get_mut(&plant).unwrap().last_mut().unwrap();
             region.area += 1;
             region.perimeter += 4 - nodes.len() as u32;
 
