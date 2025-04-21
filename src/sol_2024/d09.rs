@@ -14,7 +14,7 @@ impl DefragmentedDiskMap {
         self.raw
             .iter()
             .enumerate()
-            .filter(|(_, &bit)| bit != -1)
+            .filter(|(_, bit)| **bit != -1)
             .map(|(idx, &bit)| idx as u64 * bit as u64)
             .sum()
     }

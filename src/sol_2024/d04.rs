@@ -7,7 +7,7 @@ pub fn count_xmas(input: &str) -> u32 {
 
     let mut count = 0;
     let b: Vec<char> = input.chars().filter(|c| *c != '\n').collect();
-    for (idx, _) in b.iter().enumerate().filter(|(_, &ch)| ch == 'X') {
+    for (idx, _) in b.iter().enumerate().filter(|(_, ch)| **ch == 'X') {
         let (row, column) = (idx / SHAPE, idx % SHAPE);
 
         // Horizontal Right

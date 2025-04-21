@@ -1,7 +1,7 @@
 #![feature(let_chains)]
 #![feature(array_windows)]
 
-mod solutions;
+mod sol_2024;
 mod util;
 use std::{
     fs,
@@ -9,10 +9,10 @@ use std::{
     time::{Duration, Instant},
 };
 
-use anyhow::{anyhow, Context, Result};
+use anyhow::{Context, Result, anyhow};
 
 const DAY_RANGE: RangeInclusive<u8> = 1..=12;
-const GENERAL_ERROR_MSG: &str = "Providing no value will run all solutions. To run a specific day provide the valid day as an argument. All other scenarios will be treated as errors.";
+const GENERAL_ERROR_MSG: &str = "Providing no value will run all sol_2024. To run a specific day provide the valid day as an argument. All other scenarios will be treated as errors.";
 
 fn main() -> Result<()> {
     let args: Vec<String> = std::env::args().collect();
@@ -82,74 +82,74 @@ fn run_by_day(day: u8) -> Result<()> {
         1 => run_and_display(
             1,
             input,
-            solutions::d01::list_distance,
-            solutions::d01::list_similarity,
+            sol_2024::d01::list_distance,
+            sol_2024::d01::list_similarity,
         ),
         2 => run_and_display(
             2,
             input,
-            solutions::d02::count_safe_reports,
-            solutions::d02::count_safe_reports_with_dampener,
+            sol_2024::d02::count_safe_reports,
+            sol_2024::d02::count_safe_reports_with_dampener,
         ),
         3 => run_and_display(
             3,
             input,
-            solutions::d03::process_memory,
-            solutions::d03::process_memory_with_conditionals,
+            sol_2024::d03::process_memory,
+            sol_2024::d03::process_memory_with_conditionals,
         ),
         4 => run_and_display(
             4,
             input,
-            solutions::d04::count_xmas,
-            solutions::d04::count_x_mas,
+            sol_2024::d04::count_xmas,
+            sol_2024::d04::count_x_mas,
         ),
         5 => run_and_display(
             5,
             input,
-            solutions::d05::sum_valid_print_queue,
-            solutions::d05::sum_corrected_print_queue,
+            sol_2024::d05::sum_valid_print_queue,
+            sol_2024::d05::sum_corrected_print_queue,
         ),
         6 => run_and_display(
             6,
             input,
-            solutions::d06::count_patrol_locations,
-            solutions::incomplete,
+            sol_2024::d06::count_patrol_locations,
+            sol_2024::incomplete,
         ),
         7 => run_and_display(
             7,
             input,
-            solutions::d07::sum_calibrations,
-            solutions::d07::sum_calibrations_with_concatenation,
+            sol_2024::d07::sum_calibrations,
+            sol_2024::d07::sum_calibrations_with_concatenation,
         ),
         8 => run_and_display(
             8,
             input,
-            solutions::d08::count_anti_nodes,
-            solutions::d08::count_resonant_anti_nodes,
+            sol_2024::d08::count_anti_nodes,
+            sol_2024::d08::count_resonant_anti_nodes,
         ),
         9 => run_and_display(
             9,
             input,
-            solutions::d09::defrag_file_bits_and_checksum,
-            solutions::d09::defrag_file_chunk_and_checksum,
+            sol_2024::d09::defrag_file_bits_and_checksum,
+            sol_2024::d09::defrag_file_chunk_and_checksum,
         ),
         10 => run_and_display(
             10,
             input,
-            solutions::d10::score_trail_heads,
-            solutions::d10::rate_trail_heads,
+            sol_2024::d10::score_trail_heads,
+            sol_2024::d10::rate_trail_heads,
         ),
         11 => run_and_display(
             11,
             input,
-            |input| solutions::d11::stone_count_after_blinking(input, 25),
-            |input| solutions::d11::stone_count_after_blinking(input, 75),
+            |input| sol_2024::d11::stone_count_after_blinking(input, 25),
+            |input| sol_2024::d11::stone_count_after_blinking(input, 75),
         ),
         12 => run_and_display_with_suffix(
             12,
             input,
-            solutions::d12::garden_plot_price,
-            solutions::incomplete,
+            sol_2024::d12::garden_plot_price,
+            sol_2024::incomplete,
             "",
         ),
         _ => {}
