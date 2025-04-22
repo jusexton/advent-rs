@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{convert::Infallible, str::FromStr};
 
 #[derive(Debug)]
 struct Game {
@@ -9,7 +9,8 @@ struct Game {
 }
 
 impl FromStr for Game {
-    type Err = String;
+    // Given the nature of the input, we always expect parsing to be successful.
+    type Err = Infallible;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let (id, game) = s.split_once(": ").unwrap();
@@ -26,7 +27,7 @@ impl FromStr for Game {
                     "red" => max_red = max_red.max(count),
                     "green" => max_green = max_green.max(count),
                     "blue" => max_blue = max_blue.max(count),
-                    _ => panic!("invalid color"),
+                    _ => unreachable!(),
                 }
             }
         }
