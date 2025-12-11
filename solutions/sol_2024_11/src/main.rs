@@ -47,7 +47,7 @@ fn stone_count(number: u64, depth: usize) -> u64 {
         let digits = get_digits(number);
         let result = match number {
             0 => inner(1, depth - 1, cache),
-            _ if digits.len() % 2 == 0 => {
+            _ if digits.len().is_multiple_of(2) => {
                 let (left, right) = split_digits(digits);
                 inner(left, depth - 1, cache) + inner(right, depth - 1, cache)
             }
