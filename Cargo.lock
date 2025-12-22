@@ -156,3 +156,10 @@ version = "0.1.0"
 dependencies = [
  "atoi",
 ]
+
+[[package]]
+name = "sol_2025_03"
+version = "0.1.0"
+dependencies = [
+ "atoi",
+]
