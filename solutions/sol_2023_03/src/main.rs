@@ -1,5 +1,3 @@
-#![feature(int_from_ascii)]
-
 use std::collections::{HashMap, HashSet};
 
 #[derive(Debug)]
@@ -113,7 +111,7 @@ fn sum_engine_parts(input: &str) -> u32 {
     for number in numbers {
         let adjacent = generate_adjacent(&number, dimensions);
         if adjacent.iter().any(|adj| symbol_map.contains_key(adj)) {
-            let part_number = u32::from_ascii_radix(number.bytes, 10).unwrap();
+            let part_number = atoi::atoi::<u32>(number.bytes).unwrap();
             sum += part_number;
         }
     }
@@ -138,7 +136,7 @@ fn sum_gear_ratios(input: &str) -> u32 {
     for number in numbers {
         for adj in generate_adjacent(&number, dimensions) {
             if potential_locations.contains(&adj) {
-                let part_numbers = u32::from_ascii_radix(number.bytes, 10).unwrap();
+                let part_numbers = atoi::atoi::<u32>(number.bytes).unwrap();
                 potential_gears
                     .entry(adj)
                     .or_insert(vec![])

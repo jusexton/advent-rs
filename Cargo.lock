@@ -84,6 +84,9 @@ version = "0.1.0"
 [[package]]
 name = "sol_2023_03"
 version = "0.1.0"
+dependencies = [
+ "atoi",
+]
 
 [[package]]
 name = "sol_2023_04"
